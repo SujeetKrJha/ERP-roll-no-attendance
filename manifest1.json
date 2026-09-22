@@ -1,6 +1,6 @@
 {
-  "short_name": "My App",
-  "name": "My Custom GitHub App",
+  "short_name": "ERP Attendance",
+  "name": "Roll No sorter and attendance",
   "icons": [
     {
       "src": "icon.png",
