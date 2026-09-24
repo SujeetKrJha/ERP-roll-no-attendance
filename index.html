@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link rel="manifest" href="manifest1.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Processor & ID Generator</title>
+  <title>Attendance Sorter & ERP enabled attendance Filler</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -76,6 +76,10 @@
               <label class="inline-flex items-center cursor-pointer">
                 <input type="radio" name="semester" value="3rd" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" checked onchange="handleSemesterChange()">
                 <span class="ml-2 text-sm font-medium text-slate-800">3rd Semester <span class="text-xs text-slate-500">(0126AL25...)</span></span>
+              </label>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="radio" name="semester" value="5th" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" onchange="handleSemesterChange()">
+                <span class="ml-2 text-sm font-medium text-slate-800">5th Semester <span class="text-xs text-slate-500">(0126AL24...)</span></span>
               </label>
               <label class="inline-flex items-center cursor-pointer">
                 <input type="radio" name="semester" value="7th" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" onchange="handleSemesterChange()">
@@ -248,7 +252,18 @@
             } else {
               return `0126AL251${numStr}`;
             }
-          } else {
+          } 
+          else {
+            // 5th Sem Rules
+            if (num <= 9) {
+              return `0126AL24100${numStr}`;
+            } else if (num <= 99) {
+              return `0126AL2410${numStr}`;
+            } else {
+              return `0126AL241${numStr}`;
+            }
+          }
+        else {
             // 7th Sem Rules
             if (num <= 9) {
               return `0126AL23100${numStr}`;
