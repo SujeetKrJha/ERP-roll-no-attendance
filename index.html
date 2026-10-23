@@ -72,20 +72,22 @@
             <label class="block text-xs font-bold uppercase tracking-wider text-indigo-900">
               <i class="fa-solid fa-graduation-cap text-indigo-600 mr-1"></i> Choose Semester Rule
             </label>
-            <div class="flex gap-6">
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" name="semester" value="3rd" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" checked onchange="handleSemesterChange()">
-                <span class="ml-2 text-sm font-medium text-slate-800">3rd Semester <span class="text-xs text-slate-500">(0126AL25...)</span></span>
-              </label>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" name="semester" value="5th" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" checked onchange="handleSemesterChange()">
-                <span class="ml-2 text-sm font-medium text-slate-800">5th Semester <span class="text-xs text-slate-500">(0126AL24...)</span></span>
-              </label>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" name="semester" value="7th" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" onchange="handleSemesterChange()">
-                <span class="ml-2 text-sm font-medium text-slate-800">7th Semester <span class="text-xs text-slate-500">(0126AL23...)</span></span>
-              </label>
-            </div>
+            <div class="flex flex-wrap gap-4 md:gap-6"> 
+  <label class="inline-flex items-center cursor-pointer"> 
+    <input type="radio" name="semester" value="3rd" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" checked onchange="handleSemesterChange()"> 
+    <span class="ml-2 text-sm font-medium text-slate-800">3rd Semester <span class="text-xs text-slate-500">(0126AL25...)</span></span> 
+  </label> 
+  
+  <label class="inline-flex items-center cursor-pointer"> 
+        <input type="radio" name="semester" value="5th" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" onchange="handleSemesterChange()"> 
+    <span class="ml-2 text-sm font-medium text-slate-800">5th Semester <span class="text-xs text-slate-500">(0126AL24...)</span></span> 
+  </label> 
+  
+  <label class="inline-flex items-center cursor-pointer"> 
+    <input type="radio" name="semester" value="7th" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" onchange="handleSemesterChange()"> 
+    <span class="ml-2 text-sm font-medium text-slate-800">7th Semester <span class="text-xs text-slate-500">(0126AL23...)</span></span> 
+  </label> 
+</div>
           </div>
 
           <!-- Numbers Textbox -->
