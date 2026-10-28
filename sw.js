@@ -2,7 +2,7 @@ const CACHE_NAME = 'erp-attendance-cache-v1';
 const ASSETS = [
   './',
   './index.html',
-  './manifest.json',
+  './manifest1.json',
   './icon.png',
   './icon-512.png'
 ];
