@@ -1,22 +1,27 @@
-const CACHE_NAME = 'erp-attendance-cache-v1';
-const ASSETS = [
+const CACHE_NAME = 'erp-attendance-cache-v2';
+
+// Assets to cache during installation
+const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest1.json',
   './icon.png',
-  './icon-512.png'
+  './icon-512.png',
+  'https://cdn.tailwindcss.com',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
-// Install Service Worker and cache files locally
+// Install: Pre-cache local & external assets
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
+      return cache.addAll(PRECACHE_ASSETS);
     }).then(() => self.skipWaiting())
   );
 });
 
-// Activate Worker and clear outdated cache engines
+// Activate: Delete old caches
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) => {
@@ -31,22 +36,29 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Cache Interceptor: Network first fallback to Cache
+// Fetch: Serve from Cache first, fallback to Network (Cache-First strategy)
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    fetch(e.request)
-      .then((response) => {
-        if (response.status === 200) {
-          const cacheCopy = response.clone();
+    caches.match(e.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse; // Instant offline response
+      }
+
+      // Dynamic caching for non-precached resources
+      return fetch(e.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(e.request, cacheCopy);
+            cache.put(e.request, responseToCache);
           });
         }
-        return response;
-      })
-      .catch(() => caches.match(e.request).then((cachedResponse) => {
-        // If network falls off, serve the cached asset or redirect back home
-        return cachedResponse || caches.match('./index.html');
-      }))
+        return networkResponse;
+      }).catch(() => {
+        // Return index.html as fallback for navigation requests
+        if (e.request.mode === 'navigate') {
+          return caches.match('./index.html');
+        }
+      });
+    })
   );
 });
