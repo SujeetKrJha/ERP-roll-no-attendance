@@ -1,7 +1,7 @@
-const CACHE_NAME = 'erp-attendance-cache-v2';
+const CACHE_NAME = 'erp-attendance-cache-v3';
 
-// Assets to cache during installation
-const PRECACHE_ASSETS = [
+// All local and external assets to pre-cache
+const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest1.json',
@@ -12,16 +12,23 @@ const PRECACHE_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
-// Install: Pre-cache local & external assets
+// Install Event: Cache all assets
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_ASSETS);
+      // Use no-cors for external CDNs during pre-caching
+      return Promise.all(
+        ASSETS_TO_CACHE.map((url) => {
+          return fetch(url, { mode: 'no-cors' }).then((response) => {
+            return cache.put(url, response);
+          }).catch((err) => console.log('Failed to cache:', url, err));
+        })
+      );
     }).then(() => self.skipWaiting())
   );
 });
 
-// Activate: Delete old caches
+// Activate Event: Clear old cache versions
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) => {
@@ -36,29 +43,28 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Fetch: Serve from Cache first, fallback to Network (Cache-First strategy)
+// Fetch Event: Cache First, Fallback to Network
 self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(e.request).then((cachedResponse) => {
       if (cachedResponse) {
-        return cachedResponse; // Instant offline response
+        return cachedResponse; // Return cached asset instantly
       }
-
-      // Dynamic caching for non-precached resources
       return fetch(e.request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+        // Cache dynamic responses
+        if (networkResponse && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(e.request, responseToCache);
           });
         }
         return networkResponse;
-      }).catch(() => {
-        // Return index.html as fallback for navigation requests
-        if (e.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
       });
+    }).catch(() => {
+      // Fallback to index.html on navigation offline
+      if (e.request.mode === 'navigate') {
+        return caches.match('./index.html');
+      }
     })
   );
 });
