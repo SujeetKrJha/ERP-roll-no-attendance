@@ -73,6 +73,10 @@
               <i class="fa-solid fa-graduation-cap text-indigo-600 mr-1"></i> Choose Semester Rule
             </label>
             <div class="flex flex-wrap gap-4 md:gap-6"> 
+              <label class="inline-flex items-center cursor-pointer"> 
+    <input type="radio" name="semester" value="1st" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" onchange="handleSemesterChange()"> 
+    <span class="ml-2 text-sm font-medium text-slate-800">1st Semester <span class="text-xs text-slate-500">(0126AL25...)</span></span> 
+  </label> 
   <label class="inline-flex items-center cursor-pointer"> 
     <input type="radio" name="semester" value="3rd" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500" checked onchange="handleSemesterChange()"> 
     <span class="ml-2 text-sm font-medium text-slate-800">3rd Semester <span class="text-xs text-slate-500">(0126AL25...)</span></span> 
@@ -256,6 +260,16 @@
               return `0126AL251${numStr}`;
             }
           } 
+            else if (selectedSem === '1st') {
+            // 5th Sem Rules
+            if (num <= 9) {
+              return `0126AL26100${numStr}`;
+            } else if (num <= 99) {
+              return `0126AL2610${numStr}`;
+            } else {
+              return `0126AL261${numStr}`;
+            }
+          }
            else if (selectedSem === '5th') {
             // 5th Sem Rules
             if (num <= 9) {
